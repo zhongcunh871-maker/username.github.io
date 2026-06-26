@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>授業タイマー</title>
+<style>
+body{margin:0;background:#0b1020;color:#fff;font-family:system-ui;display:flex;align-items:center;justify-content:center;height:100vh}
+.card{background:#18233a;padding:24px;border-radius:20px;text-align:center;width:min(90vw,500px)}
+#name{font-size:2em}#time{font-size:4em;margin:.2em}small{opacity:.8}
+</style></head><body><div class="card"><div id="name">読み込み中…</div><div id="time">--:--</div><small id="info"></small></div>
+<script>
+const lessons=[
+{name:"1限",s:"09:20",e:"10:10"},
+{name:"2限",s:"10:20",e:"11:10"},
+{name:"3限",s:"11:20",e:"12:10"}
+];
+function d(t){let[a,b]=t.split(":").map(Number);let x=new Date();x.setHours(a,b,0,0);return x;}
+function fmt(ms){let s=Math.max(0,Math.floor(ms/1000));let m=Math.floor(s/60);s%=60;return String(m).padStart(2,"0")+":"+String(s).padStart(2,"0")}
+function tick(){
+let now=new Date();
+for(let i=0;i<lessons.length;i++){
+ let L=lessons[i],S=d(L.s),E=d(L.e);
+ if(now<S){name.textContent="次は "+L.name;time.textContent=fmt(S-now);info.textContent="開始まで";return;}
+ if(now>=S&&now<E){name.textContent=L.name;time.textContent=fmt(E-now);info.textContent="終了まで";return;}
+}
+name.textContent="授業時間外";time.textContent="--:--";info.textContent="今日の授業は終了";
+}
+setInterval(tick,1000);tick();
+</script></body></html>
