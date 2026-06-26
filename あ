@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>授業タイマー</title>
+
+<style>
+body{
+    margin:0;
+    background:#081321;
+    color:white;
+    font-family:sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    width:90%;
+    max-width:600px;
+    text-align:center;
+    padding:40px;
+    border-radius:25px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(15px);
+}
+
+h1{
+    font-size:42px;
+}
+
+#timer{
+    font-size:70px;
+    font-weight:bold;
+    margin:20px;
+    color:#00e5ff;
+}
+
+#period{
+    font-size:28px;
+}
+
+#next{
+    margin-top:25px;
+    opacity:.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>📚 授業タイマー</h1>
+
+    <div id="period"></div>
+
+    <div id="timer">--:--</div>
+
+    <div id="next"></div>
+</div>
+
+<script>
+
+const timetable = [
+  { name: "1限", start: "09:20", end: "10:10" },
+  { name: "2限", start: "10:20", end: "11:10" },
+  { name: "3限", start: "11:20", end: "12:10" }
+];
+
+function toDate(time){
+    const [h,m]=time.split(":");
+    const d=new Date();
+    d.setHours(h,m,0,0);
+    return d;
+}
+
+function update(){
+
+const now=new Date();
+
+for(let p of timetable){
+
+const start=toDate(p.start);
+const end=toDate(p.end);
+
+if(now>=start&&now<=end){
+
+const diff=end-now;
+
+const m=Math.floor(diff/60000);
+const s=Math.floor((diff%60000)/1000);
+
+document.getElementById("period").innerHTML=p.name;
+document.getElementById("timer").innerHTML=
+`${m.toString().padStart(2,"0")}:${s.toString().padStart(2,"0")}`;
+
+document.getElementById("next").innerHTML=
+"終了時刻 "+p.end;
+
+return;
+}
+
+}
+
+document.getElementById("period").innerHTML="授業時間外";
+document.getElementById("timer").innerHTML="--:--";
+document.getElementById("next").innerHTML="";
+
+}
+
+setInterval(update,1000);
+update();
+
+</script>
+
+</body>
+</html>
